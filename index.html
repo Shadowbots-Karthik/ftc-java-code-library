@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101820">
+  <meta name="description" content="A simple Java code vault for FTC teams. Save, browse, and share robot code snippets.">
+  <title>CodeVault FTC — Java Library</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="CodeVault home">
+        <span class="brand-mark">CV<span>_</span></span>
+        <span class="brand-name">CODE<span>VAULT</span><small>FTC JAVA LIBRARY</small></span>
+      </a>
+      <div class="team-card"><span class="status-dot"></span><div><strong>TEAM WORKSPACE</strong><small>Java code archive</small></div><span class="team-number">#JAVA</span></div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <p class="nav-label">LIBRARY</p>
+        <button class="nav-item active" id="allCodesNav"><span class="nav-icon">▤</span> All code <span class="nav-count" id="codeCount">0</span></button>
+        <button class="nav-item" id="uploadNav"><span class="nav-icon">↑</span> Import .java file</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="storage-note"><span class="note-icon">i</span><p>Your vault is saved in this browser. Export a backup to move it to another device.</p></div>
+        <button class="text-button" id="exportButton">↓ &nbsp;Export vault backup</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div class="breadcrumbs"><span>WORKSPACE</span><b>/</b><strong>CODE LIBRARY</strong></div><div class="top-actions"><span class="java-pill"><i></i> JAVA ONLY</span><button class="avatar" title="FTC Java Vault">FV</button></div></header>
+      <section class="hero">
+        <div class="hero-copy"><div class="eyebrow"><span></span> YOUR TEAM'S CODE, ORGANIZED</div><h1>Keep good code<br>in <em>circulation.</em></h1><p>A home for the Java your robot runs on. Save useful code, find it fast, and share the vault link with your team.</p><div class="hero-meta"><span>⌘ &nbsp; JAVA SNIPPETS</span><span>◉ &nbsp; FTC READY</span></div></div>
+        <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit-core"><span>JAVA</span><b>{ }</b></div><span class="art-tag tag-top">RUN / INIT</span><span class="art-tag tag-bottom">BUILD: READY</span><span class="art-cross cross-one">+</span><span class="art-cross cross-two">+</span></div>
+      </section>
+
+      <section class="library-section" id="librarySection">
+        <div class="section-heading"><div><div class="section-kicker">THE ARCHIVE</div><h2>Code library <span id="resultCount">(0)</span></h2></div><button class="primary-button" id="newCodeButton"><span>＋</span> Add Java code</button></div>
+        <div class="toolbar"><label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search code, names, tags..." autocomplete="off"></label><div class="filter-wrap"><span class="filter-icon">☷</span><select id="sortSelect" aria-label="Sort code"><option value="newest">Recently added</option><option value="oldest">Oldest first</option><option value="az">Name A–Z</option></select></div></div>
+        <div class="code-grid" id="codeGrid"></div>
+        <div class="empty-state" id="emptyState"><div class="empty-icon">{ }</div><h3>Your code vault is ready.</h3><p>Save a Java class, OpMode, or useful snippet here to get started.</p><button class="primary-button" id="emptyAddButton">＋ Add your first Java file</button></div>
+      </section>
+      <footer><span>CODEVAULT <b>FTC</b></span><span>BUILT FOR THE NEXT MATCH <i>◆</i></span></footer>
+    </main>
+  </div>
+
+  <input type="file" id="fileInput" accept=".java,text/x-java" hidden>
+  <dialog id="codeDialog" class="code-dialog">
+    <form method="dialog" class="dialog-header"><div><span class="dialog-kicker">ADD TO YOUR VAULT</span><h2>Save Java code</h2></div><button class="close-button" aria-label="Close">×</button></form>
+    <form id="codeForm" class="dialog-form">
+      <label class="field-label" for="codeTitle">NAME <span>Required</span></label><input id="codeTitle" class="text-input" maxlength="70" placeholder="e.g. TankDrive OpMode" required>
+      <div class="field-row"><label class="field-label" for="codeCategory">CATEGORY</label><select id="codeCategory" class="text-input"><option>OpMode</option><option>Subsystem</option><option>Hardware</option><option>Autonomous</option><option>TeleOp</option><option>Utility</option><option>Other</option></select></div>
+      <label class="field-label" for="codeTags">TAGS <span>Optional · comma separated</span></label><input id="codeTags" class="text-input" maxlength="100" placeholder="drive, mecanum, teleop">
+      <label class="field-label code-field-label" for="codeContent">JAVA SOURCE <span>Paste Java code or import a .java file</span></label>
+      <div class="editor-wrap"><div class="line-numbers" id="editorLineNumbers" aria-hidden="true">1</div><textarea id="codeContent" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="package org.firstinspires.ftc.teamcode;\n\n@TeleOp(name = &quot;My OpMode&quot;)\npublic class MyOpMode extends LinearOpMode {\n    @Override\n    public void runOpMode() {\n        // Your robot code here\n    }\n}" required></textarea></div>
+      <div class="editor-footer"><span><i></i> JAVA</span><span id="lineCount">1 line</span><button type="button" class="import-link" id="dialogImportButton">↑ Import .java</button></div>
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="dialog-actions"><button type="button" class="secondary-button" id="cancelButton">Cancel</button><button type="submit" class="primary-button">Save to vault <span>→</span></button></div>
+    </form>
+  </dialog>
+
+  <dialog id="viewDialog" class="view-dialog">
+    <div class="view-header"><div><span class="dialog-kicker" id="viewCategory">JAVA SOURCE</span><h2 id="viewTitle"></h2></div><div class="view-actions"><button class="secondary-button" id="copyButton">⧉ Copy code</button><button class="close-button" id="viewClose" aria-label="Close">×</button></div></div>
+    <div class="view-tags" id="viewTags"></div><div class="view-code" id="viewCode"></div><div class="view-bottom"><span id="viewDate"></span><button class="delete-button" id="deleteButton">Delete from vault</button></div>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
