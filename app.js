@@ -15,7 +15,32 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadCodes() {
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      return Array.isArray(stored) ? stored.filter(item => item && typeof item.code === 'string') : [];
+      let codesList = Array.isArray(stored) ? stored.filter(item => item && typeof item.code === 'string') : [];
+      
+      // Pre-load default starter snippets so they are visible to everyone by default
+      if (codesList.length === 0) {
+        codesList = [
+          {
+            id: 'default-1',
+            title: 'BaseMecanumTeleopCode',
+            category: 'OPMODE',
+            tags: ['ftc', 'teleop', 'drive'],
+            code: `package org.firstinspires.ftc.teamcode;\n\nimport com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;\nimport com.qualcomm.robotcore.hardware.DcMotor;\n\n@TeleOp(name="Base Mecanum Teleop")\npublic class BaseMecanumTeleopCode extends LinearOpMode {\n    @Override\n    public void runOpMode() {\n        waitForStart();\n        // Add drive logic here\n    }\n}`,
+            createdAt: Date.now() - 10000
+          },
+          {
+            id: 'default-2',
+            title: 'JavaCodeTemplate',
+            category: 'OPMODE',
+            tags: ['template', 'java'],
+            code: `// 1. PACKAGE DECLARATION (Optional)\npackage com.myname.project;\n\n// 2. IMPORTS\nimport com.qualcomm.robotcore.hardware.HardwareMap;\n\n/**\n * Template for FTC OpModes\n */`,
+            createdAt: Date.now() - 5000
+          }
+        ];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(codesList));
+      }
+      
+      return codesList;
     } catch { return []; }
   }
 
@@ -25,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, char => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": ''' })[char]);
+    return String(value).replace(/[&<>"']/g, char => ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": "'" })[char]);
   }
 
   function javaLike(source) {
